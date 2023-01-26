@@ -49,6 +49,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	UMaterial* White;
 
+	int TurnCounter;
+
+	TArray<bool> SphereStatus;
+
 
 
 	void OnePressed();
@@ -60,6 +64,8 @@ public:
 	void SevenPressed();
 	void EightPressed();
 	void NinePressed();
+
+	void TurnController(int sphereindex);
 
 
 };

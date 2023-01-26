@@ -31,17 +31,16 @@ AMainController::AMainController()
 
 	RootComponent = Spheres[4];
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
-		MeshComponentAsset(TEXT("StaticMesh'/Game/StarterContent/Props/MaterialSphere.MaterialSphere'"));s
+		MeshComponentAsset(TEXT("StaticMesh'/Game/StarterContent/Props/MaterialSphere.MaterialSphere'"));
 	for (int i{}; i < 9; i++)
 	{
 		if (i != 4)
 		{
 			Spheres[i]->SetupAttachment(GetRootComponent());
 		}
+		Spheres[i]->SetStaticMesh(MeshComponentAsset.Object);
 	}
 	
-	Spheres[i]->SetStaticMesh(MeshComponentAsset.Object);
-
 
 
 	Red = CreateDefaultSubobject<UMaterial>(TEXT("RedMaterial"));
@@ -70,6 +69,9 @@ AMainController::AMainController()
 	Spheres[7]->SetRelativeLocation(FVector(-200.f, 0.f, 0.f));
 	Spheres[8]->SetRelativeLocation(FVector(-200.f, 200.f, 0.f));
 
+	TurnCounter = 0;
+	SphereStatus.Init(NULL, 9);
+
 }
 
 // Called when the game starts or when spawned
@@ -77,6 +79,10 @@ void AMainController::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	for (int i{}; i < 9; i++)
+	{
+		Spheres[i]->SetMaterial(0, White);
+	}
 }
 
 // Called every frame
@@ -105,36 +111,72 @@ void AMainController::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AMainController::OnePressed()
 {
+	TurnController(0);
+
 }
 
 void AMainController::TwoPressed()
 {
+	TurnController(1);
 }
 
 void AMainController::ThreePressed()
 {
+	TurnController(2);
 }
 
 void AMainController::FourPressed()
 {
+	TurnController(3);
 }
 
 void AMainController::FivePressed()
 {
+	TurnController(4);
 }
 
 void AMainController::SixPressed()
 {
+	TurnController(5);
 }
 
 void AMainController::SevenPressed()
 {
+	TurnController(6);
 }
 
 void AMainController::EightPressed()
 {
+	TurnController(7);
 }
 
 void AMainController::NinePressed()
 {
+	TurnController(8);
+}
+
+
+
+void AMainController::TurnController(int sphereindex)
+{
+	if (SphereStatus[sphereindex] == true)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("That index is already taken"));
+
+		return;
+	}
+
+
+	if (TurnCounter % 2 == 0)
+	{
+		Spheres[sphereindex]->SetMaterial(0, Blue);
+	}
+	else if (TurnCounter % 2 == 1)
+	{
+		Spheres[sphereindex]->SetMaterial(0, Red);
+	}
+	SphereStatus[sphereindex] = true;
+	TurnCounter++;
+
+	
 }
